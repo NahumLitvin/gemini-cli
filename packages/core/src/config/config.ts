@@ -418,6 +418,7 @@ export interface GeminiCLIExtension {
    * These themes will be registered when the extension is activated.
    */
   themes?: CustomTheme[];
+  fenceRenderers?: Record<string, { command: string }>;
   /**
    * Policy rules contributed by this extension.
    */
