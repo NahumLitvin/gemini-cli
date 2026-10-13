@@ -82,6 +82,10 @@ import {
 } from './extensions/extensionSettings.js';
 import type { EventEmitter } from 'node:stream';
 import { themeManager } from '../ui/themes/theme-manager.js';
+import {
+  registerFenceRenderers,
+  unregisterFenceRenderers,
+} from '../ui/utils/fenceRenderers.js';
 import { getFormattedSettingValue } from '../commands/extensions/utils.js';
 import { removeDirectoryWithRetry } from '../utils/retry.js';
 
@@ -597,6 +601,7 @@ Would you like to attempt to install via "git clone" instead?`,
     if (extension.themes && !themeManager.hasExtensionThemes(extension.name)) {
       themeManager.registerExtensionThemes(extension.name, extension.themes);
     }
+    registerFenceRenderers(extension.path, extension.fenceRenderers);
   }
 
   protected override async stopExtension(extension: GeminiCLIExtension) {
@@ -604,6 +609,7 @@ Would you like to attempt to install via "git clone" instead?`,
     if (extension.themes) {
       themeManager.unregisterExtensionThemes(extension.name, extension.themes);
     }
+    unregisterFenceRenderers(extension.fenceRenderers);
   }
 
   /**
@@ -997,6 +1003,7 @@ Would you like to attempt to install via "git clone" instead?`,
         skills,
         agents: agentLoadResult.agents,
         themes: config.themes,
+        fenceRenderers: config.fenceRenderers,
         rules,
         checkers,
         plan,

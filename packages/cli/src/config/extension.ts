@@ -34,6 +34,10 @@ export interface ExtensionConfig {
    */
   themes?: CustomTheme[];
   /**
+   * Commands that draw completed fenced code blocks of a language.
+   */
+  fenceRenderers?: Record<string, { command: string }>;
+  /**
    * Planning features configuration contributed by this extension.
    */
   plan?: {

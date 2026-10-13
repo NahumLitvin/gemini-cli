@@ -8,6 +8,7 @@ import React from 'react';
 import { Text, Box } from 'ink';
 import { theme } from '../semantic-colors.js';
 import { colorizeCode } from './CodeColorizer.js';
+import { renderFence } from './fenceRenderers.js';
 import { TableRenderer } from './TableRenderer.js';
 import { RenderInline } from './InlineMarkdownRenderer.js';
 import { useSettings } from '../contexts/SettingsContext.js';
@@ -377,6 +378,22 @@ const RenderCodeBlockInternal: React.FC<RenderCodeBlockProps> = ({
   }
 
   const fullContent = content.join('\n');
+  const drawn = isPending
+    ? null
+    : renderFence(lang, fullContent, terminalWidth - CODE_BLOCK_PREFIX_PADDING);
+  if (drawn) {
+    return (
+      <Box
+        paddingLeft={CODE_BLOCK_PREFIX_PADDING}
+        flexDirection="column"
+        flexShrink={0}
+      >
+        {drawn.map((line, i) => (
+          <Text key={i}>{line}</Text>
+        ))}
+      </Box>
+    );
+  }
   const colorizedCode = colorizeCode({
     code: fullContent,
     language: lang,
