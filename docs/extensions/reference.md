@@ -343,6 +343,36 @@ when referring to a theme from an extension, the extension name is appended to
 the theme name in parentheses, for example,
 `shades-of-green (my-green-extension)`.
 
+### Fence renderers
+
+Extensions can draw fenced code blocks of their own language, the way the CLI
+draws a table. Map the language to a command in the `fenceRenderers` object of
+`gemini-extension.json`.
+
+**Example**
+
+```json
+{
+  "name": "my-diagrams",
+  "version": "1.0.0",
+  "fenceRenderers": {
+    "mermaid": {
+      "command": "node \"${extensionPath}${/}render.js\" mermaid"
+    }
+  }
+}
+```
+
+When a block of that language finishes streaming, Gemini CLI runs the command in
+the system shell with the block on stdin and `COLUMNS` set to the width the
+block can use. Each line the command prints is drawn as is, so it can use ANSI
+colors. The CLI shows the normal highlighted block instead when the command
+exits with an error, prints nothing, takes longer than 3 seconds, or prints a
+line wider than `COLUMNS`. Results are cached per language, width and block, so
+a command runs once per block and terminal width.
+
+If two extensions register the same language, the first one loaded wins.
+
 ### Conflict resolution
 
 Extension commands have the lowest precedence. If an extension command name

@@ -601,7 +601,7 @@ Would you like to attempt to install via "git clone" instead?`,
     if (extension.themes && !themeManager.hasExtensionThemes(extension.name)) {
       themeManager.registerExtensionThemes(extension.name, extension.themes);
     }
-    registerFenceRenderers(extension.path, extension.fenceRenderers);
+    registerFenceRenderers(extension.fenceRenderers);
   }
 
   protected override async stopExtension(extension: GeminiCLIExtension) {
